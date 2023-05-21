@@ -4,6 +4,7 @@ const router = express.Router();
 const product = require("../controllers/product");
 const component = require("../controllers/component");
 const supplier = require("../controllers/supplier");
+const test = require("../controllers/test");
 
 router.get("/", (req, res) =>
   res.status(200).json({
@@ -11,6 +12,7 @@ router.get("/", (req, res) =>
   })
 );
 
+router.post("/tests", test.store); //get all
 // products
 router.get("/products", product.index); //get all
 router.get("/products/:product_id", product.show); //get detail
