@@ -7,4 +7,5 @@ cp .env.example .env
 configure in file .env
 sequelize db:create
 sequelize db:migrate
+sequelize db:seed:all
 ```
