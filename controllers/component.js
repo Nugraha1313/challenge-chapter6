@@ -12,6 +12,8 @@ const sequelize = new Sequelize(
 );
 
 const initModels = require("../models/init-models");
+// const initModels = require("../models");
+
 const {
   components,
   product_components,
