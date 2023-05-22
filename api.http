@@ -1,6 +1,15 @@
 ### index (done)
 GET http://localhost:3500
 
+### tesr
+POST http://localhost:3500/tests
+Content-Type: application/json
+
+{
+    "title": "Lemari Besis",
+    "body": "asede"
+}
+
 # Product
 
 ### show all product (done)
