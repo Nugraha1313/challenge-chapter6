@@ -1,15 +1,33 @@
 require("dotenv").config();
-
 const Sequelize = require("sequelize");
+const dbConfig = require('../external/database');
+
+// Ambil konfigurasi yang sesuai berdasarkan environment
+const env = process.env.NODE_ENV || 'development';
+const config = dbConfig[env];
+
+// Inisialisasi Sequelize dengan konfigurasi yang diberikan
 const sequelize = new Sequelize(
-  process.env.DB_NAME,
-  process.env.DB_USERNAME,
-  process.env.DB_PASSWORD,
+  config.database,
+  config.username,
+  config.password,
   {
-    host: process.env.DB_HOST,
-    dialect: "postgres",
+    host: config.host,
+    dialect: 'postgres'
+    // tambahkan opsi tambahan di sini jika diperlukan
   }
 );
+
+// const Sequelize = require("sequelize");
+// const sequelize = new Sequelize(
+//   process.env.DB_NAME,
+//   process.env.DB_USERNAME,
+//   process.env.DB_PASSWORD,
+//   {
+//     host: process.env.DB_HOST,
+//     dialect: "postgres",
+//   }
+// );
 
 const initModels = require("../models/init-models");
 // const initModels = require("../models");
