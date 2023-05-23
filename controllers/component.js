@@ -1,41 +1,27 @@
 require("dotenv").config();
+
 const Sequelize = require("sequelize");
-const dbConfig = require('../external/database');
-
-// Ambil konfigurasi yang sesuai berdasarkan environment
-const env = process.env.NODE_ENV || 'development';
-const config = dbConfig[env];
-
-// Inisialisasi Sequelize dengan konfigurasi yang diberikan
 const sequelize = new Sequelize(
-  config.database,
-  config.username,
-  config.password,
+  process.env.DB_NAME,
+  process.env.DB_USERNAME,
+  process.env.DB_PASSWORD,
   {
-    host: config.host,
-    dialect: 'postgres'
-    // tambahkan opsi tambahan di sini jika diperlukan
+    host: process.env.DB_HOST,
+    dialect: "postgres",
   }
 );
 
-// const Sequelize = require("sequelize");
-// const sequelize = new Sequelize(
-//   process.env.DB_NAME,
-//   process.env.DB_USERNAME,
-//   process.env.DB_PASSWORD,
-//   {
-//     host: process.env.DB_HOST,
-//     dialect: "postgres",
-//   }
-// );
+sequelize
+  .authenticate()
+  .then(() => {
+    console.log("Connection has been established successfully.");
+  })
+  .catch((error) => {
+    console.error("Unable to connect to the database: ", error);
+  });
 
 const initModels = require("../models/init-models");
-// const initModels = require("../models");
-
-const {
-  components,
-  product_components,
-} = initModels(sequelize);
+const { components, product_components } = initModels(sequelize);
 
 // const Component = require("../models/components")(sequelize, Sequelize.DataTypes);
 // const ProductComponent = require("../models/product_components")(sequelize, Sequelize.DataTypes);

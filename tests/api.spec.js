@@ -1,19 +1,19 @@
 const supertest = require("supertest");
 const app = require("../app.js");
-const truncate = require("../utils/truncate.js");
-const seeder = require("../utils/seeder.js");
+// const truncate = require("../utils/truncate.js");
+// const seeder = require("../utils/seeder.js");
 
-truncate.component();
-truncate.product();
-truncate.suppliers();
-truncate.productComponents();
-truncate.componentSuppliers();
+// truncate.component();
+// truncate.product();
+// truncate.suppliers();
+// truncate.productComponents();
+// truncate.componentSuppliers();
 
-seeder.component();
-seeder.product();
-seeder.suppliers();
-seeder.productComponents();
-seeder.componentSuppliers();
+// seeder.component();
+// seeder.product();
+// seeder.suppliers();
+// seeder.productComponents();
+// seeder.componentSuppliers();
 
 const component = {
   name: "Kayu",

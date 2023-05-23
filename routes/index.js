@@ -12,13 +12,13 @@ router.get("/", (req, res) =>
   })
 );
 
-router.post("/tests", test.store); //get all
+// router.post("/tests", test.store); //get all
 // products
-router.get("/products", product.index); //get all
-router.get("/products/:product_id", product.show); //get detail
-router.post("/products", product.store); //create
-router.put("/products/:product_id", product.update); //update
-router.delete("/products/:product_id", product.destroy); //delete
+// router.get("/products", product.index); //get all
+// router.get("/products/:product_id", product.show); //get detail
+// router.post("/products", product.store); //create
+// router.put("/products/:product_id", product.update); //update
+// router.delete("/products/:product_id", product.destroy); //delete
 
 // components
 router.get("/components", component.index); //get all
@@ -28,10 +28,10 @@ router.put("/components/:component_id", component.update); //update
 router.delete("/components/:component_id", component.destroy); //delete
 
 // suppliers
-router.get("/suppliers", supplier.index); //get all
-router.get("/suppliers/:supplier_id", supplier.show); //get detail
-router.post("/suppliers", supplier.store); //create
-router.put("/suppliers/:supplier_id", supplier.update); //update
-router.delete("/suppliers/:supplier_id", supplier.destroy); //delete
+// router.get("/suppliers", supplier.index); //get all
+// router.get("/suppliers/:supplier_id", supplier.show); //get detail
+// router.post("/suppliers", supplier.store); //create
+// router.put("/suppliers/:supplier_id", supplier.update); //update
+// router.delete("/suppliers/:supplier_id", supplier.destroy); //delete
 
 module.exports = router;
