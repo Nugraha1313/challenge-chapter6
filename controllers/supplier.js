@@ -1,38 +1,9 @@
-require("dotenv").config();
-
-// const { body, validationResult } = require("express-validator");
-const Sequelize = require("sequelize");
-const sequelize = new Sequelize(
-  process.env.DB_NAME,
-  process.env.DB_USERNAME,
-  process.env.DB_PASSWORD,
-  {
-    host: process.env.DB_HOST,
-    dialect: "postgres",
-  }
-);
-
-const initModels = require("../models/init-models");
-const { components, component_suppliers, supplier } = initModels(sequelize);
-
-// const Supplier = require("../models/supplier")(sequelize, Sequelize.DataTypes);
-
-// const Component = require("../models/components")(
-//   sequelize,
-//   Sequelize.DataTypes
-// );
-
-// const ComponentSuppliers = require("../models/component_suppliers")(
-//   sequelize,
-//   Sequelize.DataTypes
-// );
-
-// const { Suppliers } = require("../models/Suppliers");
+const { Component, ComponentSupplier, Supplier } = require("../models");
 
 module.exports = {
   index: async (req, res, next) => {
     try {
-      const allSupplier = await supplier.findAll();
+      const allSupplier = await Supplier.findAll();
 
       return res.status(200).json({
         status: true,
@@ -46,7 +17,7 @@ module.exports = {
   show: async (req, res, next) => {
     try {
       const { supplier_id } = req.params;
-      const selectedSupplier = await supplier.findOne({
+      const selectedSupplier = await Supplier.findOne({
         where: {
           id: supplier_id,
         },
@@ -84,7 +55,7 @@ module.exports = {
       let newSupplier;
 
       if (!address) {
-        newSupplier = await supplier.create({
+        newSupplier = await Supplier.create({
           name: name,
         });
 
@@ -94,7 +65,7 @@ module.exports = {
           data: newSupplier,
         });
       } else if (component_id === 0 || !component_id) {
-        newSupplier = await supplier.create({
+        newSupplier = await Supplier.create({
           name: name,
           address: address,
         });
@@ -111,7 +82,7 @@ module.exports = {
       // const errors = validationResult(req);
 
       // find component_id
-      const components_id = await components.findAll({
+      const components_id = await Component.findAll({
         attributes: ["id"],
       });
 
@@ -128,12 +99,12 @@ module.exports = {
         });
       }
 
-      const addSupplier = await supplier.create({
+      const addSupplier = await Supplier.create({
         name: name,
         address: address,
       });
 
-      const addComponentSuppliers = await component_suppliers.create({
+      const addComponentSuppliers = await ComponentSupplier.create({
         component_id: component_id,
         supplier_id: addSupplier.id,
       });
@@ -179,17 +150,17 @@ module.exports = {
       const { supplier_id } = req.params;
       const { name, address, component_id } = req.body;
 
-      const selectedSupplier = await supplier.findOne({
+      const selectedSupplier = await Supplier.findOne({
         where: {
           id: supplier_id,
         },
       });
 
       if (!component_id || component_id === 0 || component_id == null) {
-        const updateSupplier = await supplier.update(
+        const updateSupplier = await Supplier.update(
           {
-            name: name || supplier.name,
-            address: address || supplier.address,
+            name: name || Supplier.name,
+            address: address || Supplier.address,
           },
           {
             where: {
@@ -215,7 +186,7 @@ module.exports = {
 
       // if component_id is filled
       // find component_id
-      const components_id = await components.findAll({
+      const components_id = await Component.findAll({
         attributes: ["id"],
       });
 
@@ -231,7 +202,7 @@ module.exports = {
         });
       }
 
-      const updateComponentSuppliers = await component_suppliers.update(
+      const updateComponentSuppliers = await ComponentSupplier.update(
         {
           component_id: component_id,
         },
@@ -242,10 +213,10 @@ module.exports = {
         }
       );
 
-      const updateSupplier = await supplier.update(
+      const updateSupplier = await Supplier.update(
         {
-          name: name || supplier.name,
-          address: address || supplier.address,
+          name: name || Supplier.name,
+          address: address || Supplier.address,
         },
         {
           where: {
@@ -296,7 +267,7 @@ module.exports = {
       const { supplier_id } = req.params;
 
       // check if supplier_id is used
-      const isUsed = await component_suppliers.findOne({
+      const isUsed = await ComponentSupplier.findOne({
         where: {
           supplier_id: supplier_id,
         },
@@ -310,7 +281,7 @@ module.exports = {
         });
       }
 
-      const deleted = await supplier.destroy({
+      const deleted = await Supplier.destroy({
         where: {
           id: supplier_id,
         },

@@ -1,26 +1,21 @@
-"use strict";
-
+'use strict';
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up(queryInterface, Sequelize) {
-    await queryInterface.createTable("component_suppliers", {
-      component_id: {
-        type: Sequelize.BIGINT,
+    await queryInterface.createTable("Components", {
+      id: {
         allowNull: false,
+        autoIncrement: true,
         primaryKey: true,
-        references: {
-          model: "components",
-          key: "id",
-        },
+        type: Sequelize.INTEGER,
       },
-      supplier_id: {
-        type: Sequelize.BIGINT,
-        allowNull: false,
-        primaryKey: true,
-        references: {
-          model: "supplier",
-          key: "id",
-        },
+      name: {
+        type: Sequelize.STRING,
+        allowNull:false,
+      },
+      description: {
+        type: Sequelize.STRING,
+        allowNull:true,
       },
       createdAt: {
         allowNull: false,
@@ -34,8 +29,7 @@ module.exports = {
       },
     });
   },
-
   async down(queryInterface, Sequelize) {
-    await queryInterface.dropTable("component_suppliers");
-  },
+    await queryInterface.dropTable('Components');
+  }
 };

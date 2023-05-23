@@ -1,28 +1,14 @@
-require("dotenv").config();
-
-const Sequelize = require("sequelize");
-const sequelize = new Sequelize(
-  process.env.DB_NAME,
-  process.env.DB_USERNAME,
-  process.env.DB_PASSWORD,
-  {
-    host: process.env.DB_HOST,
-    dialect: "postgres",
-  }
-);
-
-const initModels = require("../models/init-models");
 const {
-  components,
-  product_components,
-  products,
-  component_suppliers,
-  supplier,
-} = initModels(sequelize);
+  Component,
+  ProductComponent,
+  Product,
+  ComponentSupplier,
+  Supplier,
+} = require("../models");
 
 module.exports = {
   component: async () => {
-    await components.bulkCreate([
+    await Component.bulkCreate([
       {
         name: "Kayu",
         description: "Merupakan Kayu",
@@ -46,7 +32,7 @@ module.exports = {
     ]);
   },
   product: async () => {
-    await products.bulkCreate([
+    await Product.bulkCreate([
       {
         name: "Meja Kayu",
         quantity: 100,
@@ -70,7 +56,7 @@ module.exports = {
     ]);
   },
   suppliers: async () => {
-    await supplier.bulkCreate([
+    await Supplier.bulkCreate([
       {
         name: "PT. Budi Kayu",
         address: "Jl. Kayu No. 1",
@@ -94,7 +80,7 @@ module.exports = {
     ]);
   },
   productComponents: async () => {
-    await product_components.bulkCreate([
+    await ProductComponent.bulkCreate([
       {
         product_id: 1,
         component_id: 1,
@@ -118,7 +104,7 @@ module.exports = {
     ]);
   },
   componentSuppliers: async () => {
-    await component_suppliers.bulkCreate([
+    await ComponentSupplier.bulkCreate([
       {
         component_id: 1,
         supplier_id: 1,

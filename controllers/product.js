@@ -1,40 +1,10 @@
-require("dotenv").config();
-
-const Sequelize = require("sequelize");
-const sequelize = new Sequelize(
-  process.env.DB_NAME,
-  process.env.DB_USERNAME,
-  process.env.DB_PASSWORD,
-  {
-    host: process.env.DB_HOST,
-    dialect: "postgres",
-  }
-);
-
-const initModels = require("../models/init-models");
-const {
-  components,
-  product_components,
-  products,
-} = initModels(sequelize);
-
-// const Product = require("../models/products")(sequelize, Sequelize.DataTypes);
-// const Component = require("../models/components")(
-//   sequelize,
-//   Sequelize.DataTypes
-// );
-// const ProductComponent = require("../models/product_components")(
-//   sequelize,
-//   Sequelize.DataTypes
-// );
-
-// const { products } = require("../models/products");
+const { Component, ProductComponent, Product } = require("../models");
 
 module.exports = {
   index: async (req, res, next) => {
     try {
-      const allProduct = await products.findAll();
-
+      const allProduct = await Product.findAll();
+        
       return res.status(200).json({
         status: true,
         message: "Success get all product",
@@ -47,7 +17,7 @@ module.exports = {
   show: async (req, res, next) => {
     try {
       const { product_id } = req.params;
-      const product = await products.findOne({
+      const product = await Product.findOne({
         where: {
           id: product_id,
         },
@@ -103,7 +73,7 @@ module.exports = {
       // }
 
       // find component_id
-      const components_id = await components.findAll({
+      const components_id = await Component.findAll({
         attributes: ["id"],
       });
 
@@ -119,12 +89,12 @@ module.exports = {
         });
       }
 
-      const addProduct = await products.create({
+      const addProduct = await Product.create({
         name: name,
         quantity: quantity,
       });
 
-      const addComponent = await product_components.create({
+      const addComponent = await ProductComponent.create({
         product_id: addProduct.id,
         component_id: component_id,
       });
@@ -134,35 +104,6 @@ module.exports = {
         message: "Success create new Product",
         data: [addProduct, addComponent],
       });
-      // const { name, quantity } = req.body;
-      // let errorMessage = "";
-
-      // if (!name) {
-      //   errorMessage += "name is required, ";
-      // }
-
-      // if (!quantity) {
-      //   errorMessage += "quantity is required, ";
-      // }
-
-      // if (!name || !quantity) {
-      //   return res.status(404).json({
-      //     status: false,
-      //     message: errorMessage,
-      //     data: null,
-      //   });
-      // }
-
-      // const newProduct = await Product.create({
-      //   name: name,
-      //   quantity: quantity
-      // });
-
-      // return res.status(201).json({
-      //   status: true,
-      //   message: "Success create new Product",
-      //   data: newProduct
-      // });
     } catch (err) {
       next(err);
     }
@@ -172,14 +113,14 @@ module.exports = {
       const { product_id } = req.params;
       const { name, quantity, component_id } = req.body;
 
-      const product = await products.findOne({
+      const product = await Product.findOne({
         where: {
           id: product_id,
         },
       });
 
       if (!component_id) {
-        const updated = await products.update(req.body, {
+        const updated = await Product.update(req.body, {
           where: {
             id: product_id,
           },
@@ -202,7 +143,7 @@ module.exports = {
 
       // if component_id is filled
       // find component_id
-      const components_id = await components.findAll({
+      const components_id = await Component.findAll({
         attributes: ["id"],
       });
 
@@ -219,7 +160,7 @@ module.exports = {
       }
 
       // update product_components
-      const updateProductComponent = await product_components.update(
+      const updateProductComponent = await ProductComponent.update(
         {
           product_id: product_id,
           component_id: component_id,
@@ -232,16 +173,17 @@ module.exports = {
       );
 
       // update product
-      const updateProduct = await products.update(
+      const updateProduct = await Product.update(
         {
           name: name || product.name,
-          quantity: quantity || product.quantity
+          quantity: quantity || product.quantity,
         },
         {
-        where: {
-          id: product_id,
-        },
-      });
+          where: {
+            id: product_id,
+          },
+        }
+      );
       // const updateProduct = await Product.update(req.body, {
       //   where: {
       //     id: product_id,
@@ -290,7 +232,7 @@ module.exports = {
       const { product_id } = req.params;
 
       // check if product_id is used in product_components
-      const isUsed = await product_components.findOne({
+      const isUsed = await ProductComponent.findOne({
         where: {
           product_id: product_id,
         },
@@ -303,9 +245,8 @@ module.exports = {
       //     data: null,
       //   });
       // }
-      
-      
-      const deleted = await products.destroy({
+
+      const deleted = await Product.destroy({
         where: {
           id: product_id,
         },
