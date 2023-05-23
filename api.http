@@ -1,45 +1,6 @@
 ### index (done)
 GET http://localhost:3500
 
-### tesr
-POST http://localhost:3500/tests
-Content-Type: application/json
-
-{
-    "title": "Lemari Besis",
-    "body": "asede"
-}
-
-# Product
-
-### show all product (done)
-GET http://localhost:3500/products
-
-### show single product (done)
-GET http://localhost:3500/products/1
-
-### Create new product (done)
-POST http://localhost:3500/products
-Content-Type: application/json
-
-{
-    "name": "Lemari Besis",
-    "quantity": 100,
-    "component_id": 12
-}
-
-### update (done)
-PUT http://localhost:3500/products/1
-Content-Type: application/json
-
-{
-    "quantity": 112,
-    "component_id": 1
-}
-
-### delete (done)
-DELETE  http://localhost:3500/products/23
-
 # Component
 
 ### show all component (dones)
@@ -58,7 +19,7 @@ Content-Type: application/json
 }
 
 ### update (dones)
-PUT http://localhost:3500/components/7
+PUT http://localhost:3500/components/1
 Content-Type: application/json
 
 {
@@ -69,7 +30,38 @@ Content-Type: application/json
 ### delete (done)
 DELETE  http://localhost:3500/components/1
 
-# Component
+# Product
+
+### show all product (done)
+GET http://localhost:3500/products
+
+### show single product (done)
+GET http://localhost:3500/products/1
+
+### Create new product (done)
+POST http://localhost:3500/products
+Content-Type: application/json
+
+{
+    "name": "Lemari Besi",
+    "quantity": 100,
+    "component_id": 2
+}
+
+### update (done)
+PUT http://localhost:3500/products/1
+Content-Type: application/json
+
+{
+    "quantity": 112,
+    "component_id": 2
+}
+
+### delete (done)
+DELETE  http://localhost:3500/products/2
+
+
+# Supplier
 
 ### show all supplier (done)
 GET http://localhost:3500/suppliers
@@ -82,20 +74,23 @@ POST http://localhost:3500/suppliers
 Content-Type: application/json
 
 {
-    "name": "PT. Kayu Sejati",
-    "address": "JL. Jaya Abadi"
-    # "component_id": 2
+    "name": "PT. Kayu Sejatis",
+    "address": "JL. Jaya Abadi",
+    "component_id": 3
 }
 
 ### update (done)
-PUT http://localhost:3500/suppliers/1
+PUT http://localhost:3500/suppliers/3
 Content-Type: application/json
 
 {
     "name": "PT. Abadi Tembaga",
     "address": "JL. Ngurah Abadi",
-    "component_id": 3
+    "component_id": 2
 }
 
 ### delete (done)
 DELETE  http://localhost:3500/suppliers/1
+
+###
+GET https://manufacture-develop.up.railway.app/components

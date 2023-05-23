@@ -1,38 +1,12 @@
-require("dotenv").config();
-
-const Sequelize = require("sequelize");
-const sequelize = new Sequelize(
-  process.env.DB_NAME,
-  process.env.DB_USERNAME,
-  process.env.DB_PASSWORD,
-  {
-    host: process.env.DB_HOST,
-    dialect: "postgres",
-  }
-);
-
-sequelize
-  .authenticate()
-  .then(() => {
-    console.log("Connection has been established successfully.");
-  })
-  .catch((error) => {
-    console.error("Unable to connect to the database: ", error);
-  });
-
-const initModels = require("../models/init-models");
-const { components, product_components } = initModels(sequelize);
-
-// const Component = require("../models/components")(sequelize, Sequelize.DataTypes);
-// const ProductComponent = require("../models/product_components")(sequelize, Sequelize.DataTypes);
-// const Supplier = require("../models/supplier")(sequelize, Sequelize.DataTypes);
+// const { components, product_components } = require('')
 
 // const { components } = require("../models/components");
+const { Component, ProductComponent } = require("../models");
 
 module.exports = {
   index: async (req, res, next) => {
     try {
-      const allComponent = await components.findAll();
+      const allComponent = await Component.findAll();
 
       return res.status(200).json({
         status: true,
@@ -43,188 +17,168 @@ module.exports = {
       next(err);
     }
   },
-  show: async (req, res, next) => {
-    try {
-      const { component_id } = req.params;
-      const selectedComponent = await components.findOne({
-        where: {
-          id: component_id,
-        },
-      });
-
-      if (!selectedComponent) {
-        return res.status(400).json({
-          status: false,
-          message: "Can't find Component with id " + component_id,
-          data: null,
-        });
-      }
-
-      return res.status(200).json({
-        status: true,
-        message: "Success get Component detail",
-        data: selectedComponent,
-      });
-    } catch (err) {
-      next(err);
-    }
-  },
-  store: async (req, res, next) => {
-    try {
-      const { name, description } = req.body;
-
-      if (!name) {
-        return res.status(400).json({
-          status: false,
-          message: "name is required",
-          data: null,
-        });
-      }
-      let newComponent;
-
-      if (!description) {
-        newComponent = await components.create({
-          name: name,
-        });
-      } else {
-        newComponent = await components.create({
-          name: name,
-          description: description,
-        });
-      }
-
-      return res.status(201).json({
-        status: true,
-        message: "Success create new Component",
-        data: newComponent,
-      });
-      // const { name, description } = req.body;
-
-      // if (!name) {
-      //   return res.status(400).json({
-      //     status: false,
-      //     message: "name is required",
-      //     data: null,
-      //   });
-      // }
-      // let newComponent;
-
-      // if(!description) {
-      //     newComponent = await Component.create({
-      //       name: name
-      //     });
-      // }else {
-      //     newComponent = await Component.create({
-      //       name: name,
-      //       description: description,
-      //     });
-      // }
-
-      // return res.status(201).json({
-      //   status: true,
-      //   message: "Success create new Component",
-      //   data: newComponent,
-      // });
-    } catch (err) {
-      next(err);
-    }
-  },
-  update: async (req, res, next) => {
-    try {
-      const { component_id } = req.params;
-      const component = await components.findOne({
-        where: {
-          id: component_id,
-        },
-      });
-
-      const updated = await components.update(
-        {
-          name: req.body.name || component.name,
-          description: req.body.description || component.description,
-        },
-        {
+    show: async (req, res, next) => {
+      try {
+        const { component_id } = req.params;
+        const selectedComponent = await Component.findOne({
           where: {
             id: component_id,
           },
+        });
+
+        if (!selectedComponent) {
+          return res.status(400).json({
+            status: false,
+            message: "Can't find Component with id " + component_id,
+            data: null,
+          });
         }
-      );
 
-      if (updated[0] == 0) {
-        return res.status(400).json({
-          status: false,
-          message: "Cant Find Component with id " + component_id,
-          data: null,
+        return res.status(200).json({
+          status: true,
+          message: "Success get Component detail",
+          data: selectedComponent,
         });
+      } catch (err) {
+        next(err);
       }
+    },
+    store: async (req, res, next) => {
+      try {
+        const { name, description } = req.body;
 
-      return res.status(201).json({
-        status: true,
-        message: "Success update Component",
-        data: updated,
-      });
-    } catch (err) {
-      next(err);
-    }
-  },
-  destroy: async (req, res, next) => {
-    try {
-      const { component_id } = req.params;
-      const isComponentUsed = await product_components.findOne({
-        where: {
-          component_id: component_id,
-        },
-      });
+        if (!name) {
+          return res.status(400).json({
+            status: false,
+            message: "name is required",
+            data: null,
+          });
+        }
+        let newComponent;
 
-      if (isComponentUsed) {
-        return res.status(400).json({
-          status: false,
-          message: "Component is used in Product",
-          data: null,
+        if (!description) {
+          newComponent = await Component.create({
+            name: name,
+          });
+        } else {
+          newComponent = await Component.create({
+            name: name,
+            description: description,
+          });
+        }
+
+        return res.status(201).json({
+          status: true,
+          message: "Success create new Component",
+          data: newComponent,
         });
+        // const { name, description } = req.body;
+
+        // if (!name) {
+        //   return res.status(400).json({
+        //     status: false,
+        //     message: "name is required",
+        //     data: null,
+        //   });
+        // }
+        // let newComponent;
+
+        // if(!description) {
+        //     newComponent = await Component.create({
+        //       name: name
+        //     });
+        // }else {
+        //     newComponent = await Component.create({
+        //       name: name,
+        //       description: description,
+        //     });
+        // }
+
+        // return res.status(201).json({
+        //   status: true,
+        //   message: "Success create new Component",
+        //   data: newComponent,
+        // });
+      } catch (err) {
+        next(err);
       }
-
-      const deleted = await components.destroy({
-        where: {
-          id: component_id,
-        },
-      });
-
-      if (!deleted) {
-        return res.status(400).json({
-          status: false,
-          message: "Cant Find Component with id " + component_id,
-          data: null,
+    },
+    update: async (req, res, next) => {
+      try {
+        const { component_id } = req.params;
+        const component = await Component.findOne({
+          where: {
+            id: component_id,
+          },
         });
+
+        const updated = await Component.update(
+          {
+            name: req.body.name || component.name,
+            description: req.body.description || component.description,
+          },
+          {
+            where: {
+              id: component_id,
+            },
+          }
+        );
+
+        if (updated[0] == 0) {
+          return res.status(400).json({
+            status: false,
+            message: "Cant Find Component with id " + component_id,
+            data: null,
+          });
+        }
+
+        return res.status(201).json({
+          status: true,
+          message: "Success update Component",
+          data: updated,
+        });
+      } catch (err) {
+        next(err);
       }
+    },
+    destroy: async (req, res, next) => {
+      try {
+        const { component_id } = req.params;
+        const isComponentUsed = await ProductComponent.findOne({
+          where: {
+            component_id: component_id,
+          },
+        });
 
-      return res.status(200).json({
-        status: true,
-        message: "Success delete Component with id " + component_id,
-        data: deleted,
-      });
-      // const { component_id } = req.params;
-      // const deleted = await Component.destroy({
-      //   where: {
-      //     id: component_id,
-      //   },
-      // });
+        if (isComponentUsed) {
+          return res.status(400).json({
+            status: false,
+            message: "Component is used in Product",
+            data: null,
+          });
+        }
 
-      // if (!deleted) {
-      //   return res.status(400).json({
-      //     status: false,
-      //     message: "Cant Find Component with id " + component_id,
-      //     data: null,
-      //   });
-      // }
+        const deleted = await Component.destroy({
+          where: {
+            id: component_id,
+          },
+        });
 
-      // return res.status(200).json({
-      //   status: true,
-      //   message: "Success delete Component",
-      //   data: deleted,
-      // });
-    } catch (err) {
-      next(err);
-    }
-  },
+        if (!deleted) {
+          return res.status(400).json({
+            status: false,
+            message: "Cant Find Component with id " + component_id,
+            data: null,
+          });
+        }
+
+        return res.status(200).json({
+          status: true,
+          message: "Success delete Component with id " + component_id,
+          data: deleted,
+        });
+      } catch (err) {
+        next(err);
+      }
+    },
 };
