@@ -11,6 +11,16 @@ router.get("/", (req, res) =>
   })
 );
 
+router.get("/error", (req, res) => {
+  // const data = {
+  //   status: true,
+  //   message: "ga error lagi",
+  //   data: null,
+  // };
+
+  return res.status(200).json(data);
+});
+
 // components
 router.get("/components", component.index); //get all
 router.get("/components/:component_id", component.show); //get detail
