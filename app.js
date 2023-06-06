@@ -2,7 +2,7 @@ require('dotenv').config()
 const express = require("express");
 const Sentry = require("@sentry/node");
 const app = express();
-const port = 8000;
+// const port = 8000;
 
 const morgan = require("morgan");
 const swaggerUI = require("swagger-ui-express");
@@ -34,7 +34,7 @@ Sentry.init({
   tracesSampleRate: 1.0,
 });
 
-
+app.use(cors())
 app.use(morgan("dev"));
 app.use(express.json());
 app.use('/api-docs', swaggerUI.serve, swaggerUI.setup(swaggerDocument));
